@@ -1,5 +1,5 @@
 [local]
 name=local
-baseurl=file:///vagrant/yml/httpd/localrpm/
+baseurl=file:///vagrant/httpd/localrpm/
 enabled=1
 gpgcheck=0
