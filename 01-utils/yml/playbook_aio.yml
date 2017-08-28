@@ -9,13 +9,13 @@
       - kolla-ansible
       - python-openstackclient
     rpm_packages:
-      - ca-certificates
       - docker-ce
+      - python-devel
+      - python-pip
+      - ca-certificates
       - gcc
       - libffi-devel
       - openssl
-      - python-devel
-      - python-pip
       - libselinux-python
       - ntp
   tasks:
