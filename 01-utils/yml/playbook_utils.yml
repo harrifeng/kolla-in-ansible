@@ -30,7 +30,7 @@
         state: directory
     - name: Ensure docker.json had contents
       copy:
-        src: config/daemon.json
+        src: tasks/config/daemon.json
         dest: /etc/docker/daemon.json
         force: yes
     - name: Make sure docker is running
