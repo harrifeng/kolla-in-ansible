@@ -2,17 +2,13 @@
 - hosts: 01-utils
   sudo: yes
   tasks:
-    - name: Make sure the /vagrant/yml/httpd existed
+    - name: Make sure the /vagrant/httpd existed
       file:
-        path: /vagrant/yml/httpd
+        path: /vagrant/httpd
         state: directory
-    - name: clean other repo
-      shell: |
-        mkdir -p /tmp/repos
-        mv /etc/yum.repos.d/* /tmp/repos
     - name: local repo
       copy:
-        src: local.repo
+        src: tasks/config/local.repo
         dest: /etc/yum.repos.d/local.repo
         force: yes
     - name: Install package again
@@ -34,7 +30,7 @@
         state: directory
     - name: Ensure docker.json had contents
       copy:
-        src: config/daemon.json
+        src: tasks/config/daemon.json
         dest: /etc/docker/daemon.json
         force: yes
     - name: Make sure docker is running
@@ -78,7 +74,7 @@
         ports:
           - "5001:80"
         volumes:
-          - "/vagrant/yml/httpd:/usr/local/apache2/htdocs"
+          - "/vagrant/httpd:/usr/local/apache2/htdocs"
     - name: Make sure the directory for docker image is existed
       file:
         path: /opt/registry
@@ -89,7 +85,7 @@
       register: repo_st
     - name: Judge docker image centos-source-registry-ocata.tar.gz is existed
       stat:
-        path: /vagrant/yml/httpd/centos-source-registry-ocata.tar.gz
+        path: /vagrant/httpd/centos-source-registry-ocata.tar.gz
       register: gz_st
     - name: Download the image file first
       fail:
@@ -97,7 +93,7 @@
       when: not gz_st.stat.exists
     - name: unzip the file to /opt/registry
       shell: |
-        tar zxvf /vagrant/yml/httpd/centos-source-registry-ocata.tar.gz -C /opt/registry/
+        tar zxvf /vagrant/httpd/centos-source-registry-ocata.tar.gz -C /opt/registry/
       when: not repo_st.stat.exists
     - name: Make sure the registry2 is running
       docker_container:
