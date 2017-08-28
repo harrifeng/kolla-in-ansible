@@ -1,0 +1,5 @@
+[utils]
+name=utils
+baseurl=http://10.0.111.111:5001/localrpm/
+enabled=1
+gpgcheck=0
