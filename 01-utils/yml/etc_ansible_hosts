@@ -1,0 +1,13 @@
+[01-utils]
+10.0.111.111
+
+[02-aio]
+10.0.23.21
+
+[kolla-group:children]
+01-utils
+02-aio
+
+[kolla-group:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa

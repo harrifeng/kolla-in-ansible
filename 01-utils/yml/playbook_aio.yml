@@ -1,0 +1,96 @@
+---
+- hosts: 02-aio
+  sudo: yes
+  vars:
+    systemd_docker_config_directory: /etc/systemd/system/docker.service.d
+    pypi_packages:
+      - ansible
+      - docker
+      - kolla-ansible
+      - python-openstackclient
+    rpm_packages:
+      - ca-certificates
+      - docker-ce
+      - gcc
+      - libffi-devel
+      - openssl
+      - python-devel
+      - python-pip
+      - libselinux-python
+      - ntp
+  tasks:
+    - name: Make sure the root ssh folder exists
+      file:
+        path: /root/.ssh
+        state: directory
+    - name: Make sure the id_rsa.pub
+      copy:
+        src: dotssh/id_rsa.pub
+        dest: /root/.ssh/id_rsa.pub
+        mode: 0644
+    - name: Make sure the id_rsa
+      copy:
+        src: dotssh/id_rsa
+        dest: /root/.ssh/id_rsa
+        mode: 0600
+    - name: Make sure the authorized_keys
+      copy:
+        src: dotssh/authorized_keys
+        dest: /root/.ssh/authorized_keys
+        mode: 0644
+    - name: clean other repo
+      shell: |
+        rm -f /etc/yum.repos.d/*
+    - name: utils repo
+      copy:
+        src: utils.repo
+        dest: /etc/yum.repos.d/utils.repo
+        force: yes
+    - name: Install list of packages from local utils repo
+      yum:
+        name: "{{ item }}"
+        state: present
+        conf_file: utils.repo
+        disable_gpg_check: yes
+      with_items: "{{ rpm_packages }}"
+    - name: Install Pip Packages
+      pip:
+        name: "{{ item }}"
+        state: present
+        extra_args: "-i http://10.0.111.111:5002/simple --trusted-host 10.0.111.111"
+      with_items: "{{ pypi_packages }}"
+    - name: Make sure ntp is running
+      systemd:
+        state: started
+        name: ntpd
+    - name: Make sure firewalld is disabled
+      systemd:
+        state: stopped
+        name: firewalld
+    - name: Diable selinux
+      selinux:
+        state: disabled
+    - name: Ensure docker.service directory is existed
+      file:
+        path: "{{ systemd_docker_config_directory }}"
+        state: directory
+    - name: Ensure kolla.conf had contents
+      copy:
+        src: config/kolla.conf
+        dest: "{{ systemd_docker_config_directory }}/kolla.conf"
+        force: yes
+    - name: Ensure docker.etc directory is existed
+      file:
+        path: "/etc/docker"
+        state: directory
+    - name: Ensure docker.json had contents
+      copy:
+        src: config/daemon.json
+        dest: /etc/docker/daemon.json
+        force: yes
+    - name: Restart docker systemd to take effect
+      systemd:
+        state: started
+        enabled: yes
+        daemon_reload: yes
+        name: docker
