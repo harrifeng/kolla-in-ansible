@@ -38,9 +38,6 @@
         src: dotssh/authorized_keys
         dest: /root/.ssh/authorized_keys
         mode: 0644
-    - name: clean other repo
-      shell: |
-        rm -f /etc/yum.repos.d/*
     - name: utils repo
       copy:
         src: utils.repo

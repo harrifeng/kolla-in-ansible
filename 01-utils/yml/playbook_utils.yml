@@ -6,10 +6,6 @@
       file:
         path: /vagrant/yml/httpd
         state: directory
-    - name: clean other repo
-      shell: |
-        mkdir -p /tmp/repos
-        mv /etc/yum.repos.d/* /tmp/repos
     - name: local repo
       copy:
         src: local.repo
