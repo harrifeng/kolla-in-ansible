@@ -4,6 +4,9 @@
 [02-aio]
 10.0.23.21
 
+[03-deployment]
+10.0.25.31
+
 [03-multinode]
 10.0.25.41
 10.0.25.51
@@ -16,6 +19,7 @@
 [kolla-group:children]
 01-utils
 02-aio
+03-deployment
 03-multinode
 
 [kolla-group:vars]

@@ -1,9 +1,10 @@
 hostinfo = [
-  ["control", 1, 40],
-  ["network", 1, 50],
-  ["compute", 1, 60],
+  ["deployment", 1, 30],
+  ["control",    1, 40],
+  ["network",    1, 50],
+  ["compute",    1, 60],
   ["monitoring", 1, 70],
-  ["storage", 3, 80]
+  ["storage",    3, 80]
 ]
 
 Vagrant.configure("2") do |config|
