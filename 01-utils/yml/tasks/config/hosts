@@ -1,5 +1,6 @@
 127.0.0.1  localhost
 
+10.0.25.31  deploy-1
 10.0.25.41  control-1
 10.0.25.51  network-1
 10.0.25.61  compute-1

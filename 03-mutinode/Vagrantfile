@@ -1,5 +1,5 @@
 hostinfo = [
-  ["deployment", 1, 30],
+  ["deploy",     1, 30],
   ["control",    1, 40],
   ["network",    1, 50],
   ["compute",    1, 60],
