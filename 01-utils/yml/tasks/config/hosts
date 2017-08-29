@@ -1,9 +1,10 @@
 127.0.0.1  localhost
 
-10.0.25.41  04-kolla-mul-control
-10.0.25.51  05-kolla-mul-network
-10.0.25.61  06-kolla-mul-compute
-10.0.25.71  07-kolla-mul-monitoring
-10.0.25.81  08-1-kolla-mul-storage
-10.0.25.82  08-2-kolla-mul-storage
-10.0.25.83  08-3-kolla-mul-storage
+10.0.25.31  deploy-1
+10.0.25.41  control-1
+10.0.25.51  network-1
+10.0.25.61  compute-1
+10.0.25.71  monitoring-1
+10.0.25.81  storage-1
+10.0.25.82  storage-2
+10.0.25.83  storage-3

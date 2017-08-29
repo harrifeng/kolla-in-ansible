@@ -4,9 +4,20 @@
 [02-aio]
 10.0.23.21
 
+[03-multinode]
+10.0.25.31
+10.0.25.41
+10.0.25.51
+10.0.25.61
+10.0.25.71
+10.0.25.81
+10.0.25.82
+10.0.25.83
+
 [kolla-group:children]
 01-utils
 02-aio
+03-multinode
 
 [kolla-group:vars]
 ansible_ssh_user=vagrant
