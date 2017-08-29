@@ -34,3 +34,4 @@
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       when: ansible_hostname | search("storage")
+      ignore_errors: yes        # may already in use

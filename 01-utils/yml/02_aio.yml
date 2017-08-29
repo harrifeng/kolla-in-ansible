@@ -39,3 +39,4 @@
     - name: Prepare the OSD as storage driver
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
+      ignore_errors: yes        # may already in use
