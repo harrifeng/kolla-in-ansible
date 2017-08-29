@@ -32,5 +32,5 @@
     - name: Get contents from /usr/share/kolla-ansible
       copy:
         src: tasks/config/multinode
-        dest: /root/inventory/all-in-one
+        dest: /root/inventory/multinode
         force: yes

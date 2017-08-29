@@ -29,11 +29,6 @@
         ext_net_cidr:    "{{ external_ip }}.0/24"
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
-    - name: Get contents from /usr/share/kolla-ansible
-      copy:
-        src: tasks/config/multinode
-        dest: /root/inventory/all-in-one
-        force: yes
     - name: Prepare the OSD as storage driver
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
