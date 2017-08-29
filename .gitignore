@@ -53,3 +53,4 @@ build-iPhoneSimulator/
 *.retry
 *.vdi
 tmp/
+tmp.*
