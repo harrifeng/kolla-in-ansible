@@ -41,3 +41,21 @@
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       when: ansible_hostname | search("storage")
       ignore_errors: yes        # may already in use
+    - name: This process should NOT takes long, otherwise set host_key_checking = False in ansible.cfg
+      shell: |
+        ansible all -i multinode -a "hostname"
+    - name: Deploy the multinode on deployment-1 machine
+      shell: |
+        kolla-ansible deploy -i /root/inventory/multinode
+        kolla-ansible post-deploy -i /root/inventory/multinode
+      when: ansible_hostname | search("deploy-1")
+    - name: Create new instance
+      shell: |
+        source /etc/kolla/admin-openrc.sh
+        /usr/share/kolla-ansible/init-runonce
+      when: ansible_hostname | search("deploy-1")
+    - name: Make the br-ex had a new ip address, it connects br-ex
+      shell: |
+        ip addr add 10.0.26.254/24 dev br-ex
+        ip link set br-ex up
+      when: ansible_hostname | search("network")
