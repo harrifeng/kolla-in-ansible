@@ -45,6 +45,7 @@
       shell: |
         kolla-ansible deploy -i /root/inventory/multinode
         kolla-ansible post-deploy -i /root/inventory/multinode
+      when: ansible_hostname | search("deploy-1")
     - name: Create new instance
       shell: |
         source /etc/kolla/admin-openrc.sh
