@@ -40,3 +40,21 @@
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       ignore_errors: yes        # may already in use
+    - name: Clean old containers
+      shell: |
+        docker stop `docker ps -a -q`
+        docker system prune --force
+        /usr/share/kolla-ansible/tools/cleanup-host
+        /usr/share/kolla-ansible/tools/cleanup-containers
+    - name: Deploy all the instance
+      shell: |
+        kolla-ansible deploy -i /root/inventory/all-in-one
+        kolla-ansible post-deploy
+    - name: Create the All In One Kolla
+      shell: |
+        source /etc/kolla/admin-openrc.sh
+        /usr/share/kolla-ansible/init-runonce
+    - name: Make the br-ex had a new ip address, it connects br-ex
+      shell: |
+        ip addr add 10.0.24.254/24 dev br-ex
+        ip link set br-ex up
