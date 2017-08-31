@@ -36,10 +36,11 @@
         ext_net_cidr:    "{{ external_ip }}.0/24"
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
+        deploy_file: /root/inventory/multinode
         config_files:
           - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", name: "kolla.conf"}
           - { src: "tasks/config", dest: "/root/inventory",                      name: "multinode"}
-          - { src: "tasks/config", dest: "/etc/hosts",                           name: "hosts"}
+          - { src: "tasks/config", dest: "/etc",                                 name: "hosts"}
       when: ansible_hostname | search("deploy-1")
     - name: Make the br-ex had a new ip address, it connects br-ex
       shell: |
