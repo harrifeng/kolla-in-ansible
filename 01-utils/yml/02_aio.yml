@@ -31,10 +31,10 @@
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
         config_files:
-          - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", file: "kolla.conf"}
-          - { src: "tasks/config", dest: "/root/inventory",                      file: "all-in-one"}
-          - { src: "tasks/config", dest: "/etc",                                 file: "hosts"}
-          - { src: "tasks/config", dest: "/etc/kolla/config",                    file: "ceph.conf"} # only all-in-one need this
+          - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", name: "kolla.conf"}
+          - { src: "tasks/config", dest: "/root/inventory",                      name: "all-in-one"}
+          - { src: "tasks/config", dest: "/etc",                                 name: "hosts"}
+          - { src: "tasks/config", dest: "/etc/kolla/config",                    name: "ceph.conf"} # only all-in-one need this
     - name: Prepare the OSD as storage driver
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
