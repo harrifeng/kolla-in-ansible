@@ -30,6 +30,7 @@
         ext_net_cidr:    "{{ external_ip }}.0/24"
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
+        deploy_file: /root/inventory/all-in-one
         config_files:
           - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", name: "kolla.conf"}
           - { src: "tasks/config", dest: "/root/inventory",                      name: "all-in-one"}
