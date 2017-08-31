@@ -24,6 +24,6 @@
     state: directory
 - name: Make sure the id_rsa.pub
   copy:
-    src: ansible.cfg
+    src: config/ansible.cfg
     dest: /etc/ansible/ansible.cfg
     mode: 0644
