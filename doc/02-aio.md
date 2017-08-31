@@ -23,54 +23,61 @@ cd /vagrant/yml
 ansible-playbook -i etc_ansible_hosts 02_aio.yml
 ```
 
-## Check the repos status
+## Check the deployment status
 
-+ After using ansible-playbook to create the 3 repo, we need to check their status.
-*go to the machine which deploy the vagrant* and run following command (or open the url
-in the browser):
-+ Docker repo
++ The deployment will takes about half an hour. One time sheet for the whole process is
 ```
-$ curl http://10.0.111.111:5000/v2/_catalog
-{"repositories":["lokolla/centos-source-aodh-api","lokolla/centos-source-aodh-base",.....}
+===============================================================================
+Deploy all the instance ---------------------------------------------- 1373.53s
+Install list of packages from local utils repo ------------------------ 181.18s
+Create the All In One Kolla -------------------------------------------- 72.55s
+Gen password for /etc/kolla/passwords.yml ------------------------------ 35.92s
+Install Pip Packages ---------------------------------------------------- 5.26s
+Modify /etc/kolla/globals.yml ------------------------------------------- 4.73s
+Copy the config file to the destination --------------------------------- 4.42s
+Ensure config file folders exists --------------------------------------- 2.01s
+Modify /usr/share/kolla-ansible/init-runonce ---------------------------- 1.79s
+Gathering Facts --------------------------------------------------------- 1.24s
+utils repo -------------------------------------------------------------- 1.23s
+Ensure nova-compute.conf had contents ----------------------------------- 1.06s
+Make sure the id_rsa.pub ------------------------------------------------ 1.05s
+Make sure the authorized_keys ------------------------------------------- 1.00s
+Make sure the id_rsa.pub ------------------------------------------------ 0.92s
+Make sure the id_rsa ---------------------------------------------------- 0.91s
+Ensure docker.json had contents ----------------------------------------- 0.89s
+Clean old containers ---------------------------------------------------- 0.69s
+Make sure ntp is running ------------------------------------------------ 0.64s
+Diable selinux ---------------------------------------------------------- 0.58s
 ```
-+ rpm repo
++ if it takes longer than that time, please log in
+02-aio and run following command to see whether the docker instances are being built
 ```
-$ curl http://10.0.111.111:5001/localrpm/
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
- <head>
-  <title>Index of /localrpm</title>
- </head>
- <body>
-<h1>Index of /localrpm</h1>
-<ul><li><a href="/"> Parent Directory</a></li>
-<li><a href=".gitignore"> .gitignore</a></li>
-<li><a href="autogen-libopts-5.18-5.el7.x86_64.rpm"> autogen-libopts-5.18-5.el7.x86_64.rpm</a></li>
-<li><a href="ca-certificates-2015.2.6-73.el7_2017.2.14-70.1.el7_3.noarch.drpm"> ca-certificates-2015.2.6-73.el7_2017.2.14-70.1.el7_3.noarch.drpm</a></li>
-<li><a href="ca-certificates-2017.2.14-70.1.el7_3.noarch.rpm"> ca-certificates-2017.2.14-70.1.el7_3.noarch.rpm</a></li>
-<li><a href="container-selinux-2.19-2.1.el7.noarch.rpm"> container-selinux-2.19-2.1.el7.noarch.rpm</a></li>
-<li><a href="cpp-4.8.5-11.el7.x86_64.rpm"> cpp-4.8.5-11.el7.x86_64.rpm</a></li>
-<li><a href="device-mapper-persistent-data-0.6.3-1.el7.x86_64.rpm"> device-mapper-persistent-data-0.6.3-1.el7.x86_64.rpm</a></li>
-<li><a href="docker-ce-17.06.1.ce-1.el7.centos.x86_64.rpm"> docker-ce-17.06.1.ce-1.el7.centos.x86_64.rpm</a></li>
-...
-</ul>
-</body></html>
+# docker ps
+CONTAINER ID        IMAGE                                                                     COMMAND             CREATED             STATUS              PORTS               NAMES
+d8446cb4c8cd        10.0.111.111:5000/lokolla/centos-source-horizon:4.0.3                     "kolla_start"       16 seconds ago      Up 16 seconds                           horizon
+88b5017a8e61        10.0.111.111:5000/lokolla/centos-source-heat-engine:4.0.3                 "kolla_start"       53 seconds ago      Up 52 seconds                           heat_engine
+0290f59dd584        10.0.111.111:5000/lokolla/centos-source-heat-api-cfn:4.0.3                "kolla_start"       54 seconds ago      Up 53 seconds                           heat_api_cfn
+a5b284e3e68c        10.0.111.111:5000/lokolla/centos-source-heat-api:4.0.3                    "kolla_start"       54 seconds ago      Up 54 seconds                           heat_api
+ef83b3113f15        10.0.111.111:5000/lokolla/centos-source-neutron-server:4.0.3              "kolla_start"       2 minutes ago       Up 2 minutes                            neutron_server
 ```
-+ pypi repo
+
++ After the deployment, we need to open the brower on the vagrant running machine and input
 ```
-$ curl http://10.0.111.111:5002/simple/
-    <html>
-        <head>
-            <title>Simple Index</title>
-        </head>
-        <body>
-            <h1>Simple Index</h1>
-                 <a href="ansible/">ansible</a><br>
-                 <a href="appdirs/">appdirs</a><br>
-                 <a href="asn1crypto/">asn1crypto</a><br>
-                 <a href="babel/">babel</a><br>
-                 ...
-        </body>
-    </html>
+http://10.0.23.222
 ```
-+ Make sure the three repos all works before going to next step
++ If the login page show, inpu the default user and password:
+
+  - user: admin
+  - pass: welcome
++ The password is set by modifing the passwords.yml in following ansible code by this project
+
+```
+- name: Modify /etc/kolla/passwords.yml
+  lineinfile:
+    path: /etc/kolla/passwords.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^keystone_admin_password',    line: 'keystone_admin_password: welcome'}
+
+```
