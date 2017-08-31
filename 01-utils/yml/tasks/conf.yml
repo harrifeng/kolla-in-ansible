@@ -14,22 +14,12 @@
     src: config/nova-compute.conf
     dest: /etc/kolla/config/nova/nova-compute.conf
   when: vm_num.stdout|int == 0
-- name: Ensure config had folder
-  file:
-    path: /etc/kolla/config/
-    state: directory
-- name: Modify the etc hosts file
-  copy:
-    src: config/hosts
-    dest: /etc/hosts
-    force: yes
 - name: Ensure the target folder existed
   file:
     path: "{{ item }}"
     state: directory
   with_items:
     - /etc/kolla
-    - /root/inventory
 - name: Get contents from /usr/share/kolla-ansible
   shell: |
     cp -r /usr/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/
