@@ -20,6 +20,7 @@
           - openssl
           - libselinux-python
           - ntp
+    - include: tasks/ssh.yml
     - include: tasks/conf.yml
       vars:
         network_interface:          enp0s8
@@ -29,13 +30,11 @@
         ext_net_cidr:    "{{ external_ip }}.0/24"
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
-    - name: Get contents from /usr/share/kolla-ansible
-      shell: |
-        cp -r /usr/share/kolla-ansible/ansible/inventory/all-in-one /root/inventory/all-in-one
-    - name: Ensure ceph.conf had contents # only all-in-one need this setting, as we only had one hosts
-      copy:
-        src: tasks/config/ceph.conf
-        dest: /etc/kolla/config/ceph.conf
+        config_files:
+          - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", file: "kolla.conf"}
+          - { src: "tasks/config", dest: "/root/inventory",                      file: "all-in-one"}
+          - { src: "tasks/config", dest: "/etc/hosts",                           file: "hosts"}
+          - { src: "tasks/config", dest: "/etc/kolla/config",                    file: "ceph.conf"} # only all-in-one need this
     - name: Prepare the OSD as storage driver
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1

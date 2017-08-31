@@ -25,7 +25,8 @@
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       when: ansible_hostname | search("storage")
       ignore_errors: yes        # may already in use
-
+    - include: tasks/ssh.yml
+      when: ansible_hostname | search("deploy-1")
     - include: tasks/conf.yml
       vars:
         network_interface:          enp0s8
@@ -39,9 +40,7 @@
           - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", file: "kolla.conf"}
           - { src: "tasks/config", dest: "/root/inventory",                      file: "multinode"}
           - { src: "tasks/config", dest: "/etc/hosts",                           file: "hosts"}
-          - { src: "tasks/config", dest: "/etc/ansible",                         file: "ansible.cfg"}
       when: ansible_hostname | search("deploy-1")
-
     - name: Make the br-ex had a new ip address, it connects br-ex
       shell: |
         ip addr add 10.0.26.254/24 dev br-ex

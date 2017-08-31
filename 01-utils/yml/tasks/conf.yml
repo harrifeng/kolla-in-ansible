@@ -1,4 +1,15 @@
 ---
+- name: Ensure config file folders exists
+  file:
+    path: "{{ item.dest }}"
+    state: directory
+  with_items: "{{ config_files }}"
+- name: Copy the config file to the destination
+  copy:
+    src: "{{ item.src }}/{{ item.name}}"
+    dest: "{{ item.dest }}/{{ item.name}}"
+    force: yes
+  with_items: "{{ config_files }}"
 - name: Find out the vm support
   shell: |
     egrep -c '(vmx|svm)' /proc/cpuinfo

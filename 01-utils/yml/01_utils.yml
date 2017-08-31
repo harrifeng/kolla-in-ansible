@@ -2,6 +2,7 @@
 - hosts: 01-utils
   sudo: yes
   tasks:
+    - include: tasks/ssh.yml
     - name: Make sure the /vagrant/httpd existed
       file:
         path: /vagrant/httpd
