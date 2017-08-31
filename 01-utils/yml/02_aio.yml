@@ -33,7 +33,7 @@
         config_files:
           - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", file: "kolla.conf"}
           - { src: "tasks/config", dest: "/root/inventory",                      file: "all-in-one"}
-          - { src: "tasks/config", dest: "/etc/hosts",                           file: "hosts"}
+          - { src: "tasks/config", dest: "/etc",                                 file: "hosts"}
           - { src: "tasks/config", dest: "/etc/kolla/config",                    file: "ceph.conf"} # only all-in-one need this
     - name: Prepare the OSD as storage driver
       shell: |
