@@ -7,4 +7,5 @@ createrepo  /vagrant/httpd/localrpm
 echo "pip----------->"
 sudo pip install -U pip -i http://mirrors.aliyun.com/pypi/simple --trusted-host=mirrors.aliyun.com
 sudo pip install ansible -i http://mirrors.aliyun.com/pypi/simple --trusted-host=mirrors.aliyun.com
+sudo cp /vagrant/yml/tasks/config/ansible.cfg /vagrant/yml/ansible.cfg
 echo "finishing provision--------------->"
