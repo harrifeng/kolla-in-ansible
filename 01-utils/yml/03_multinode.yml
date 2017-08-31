@@ -2,6 +2,7 @@
 - hosts: 03-multinode
   sudo: yes
   tasks:
+    - include: tasks/ssh.yml
     - include: tasks/base.yml
       vars:
         systemd_docker_config_directory: /etc/systemd/system/docker.service.d
@@ -25,8 +26,6 @@
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       when: ansible_hostname | search("storage")
       ignore_errors: yes        # may already in use
-    - include: tasks/ssh.yml
-      when: ansible_hostname | search("deploy-1")
     - include: tasks/conf.yml
       vars:
         network_interface:          enp0s8

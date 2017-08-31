@@ -2,6 +2,7 @@
 - hosts: 02-aio
   sudo: yes
   tasks:
+    - include: tasks/ssh.yml
     - include: tasks/base.yml
       vars:
         systemd_docker_config_directory: /etc/systemd/system/docker.service.d
@@ -20,7 +21,6 @@
           - openssl
           - libselinux-python
           - ntp
-    - include: tasks/ssh.yml
     - include: tasks/conf.yml
       vars:
         network_interface:          enp0s8
