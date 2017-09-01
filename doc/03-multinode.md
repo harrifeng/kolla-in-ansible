@@ -42,31 +42,31 @@ ansible-playbook -i etc_ansible_hosts 03_multinode.yml
 
 ## Check the deployment status
 
-+ The deployment will takes about fourty minutes. One time sheet for the whole process is
++ The deployment will takes about forty minutes. One time sheet for the whole process is
 Please Note: if you want to make it run faster, you should give each host a better memory and cpu
 
 ```
 ===============================================================================
-Deploy all the instance ---------------------------------------------- 2062.23s
-Create the All In One Kolla ------------------------------------------- 824.39s
-Gen password for /etc/kolla/passwords.yml ------------------------------ 45.23s
-Install Pip Packages ---------------------------------------------------- 9.70s
-Modify /etc/kolla/globals.yml ------------------------------------------- 4.30s
-Install list of packages from local utils repo -------------------------- 2.51s
-Copy the config file to the destination --------------------------------- 2.45s
-Gathering Facts --------------------------------------------------------- 2.26s
-Make the br-ex had a new ip address, it connects br-ex ------------------ 2.23s
-Make sure the id_rsa.pub ------------------------------------------------ 2.11s
+Deploy all the instance ---------------------------------------------- 1398.45s
+Install list of packages from local utils repo ------------------------ 751.07s
+Install Pip Packages --------------------------------------------------- 98.96s
+Create the All In One Kolla -------------------------------------------- 96.53s
+Gen password for /etc/kolla/passwords.yml ------------------------------ 38.56s
+Modify /etc/kolla/globals.yml ------------------------------------------- 4.12s
+Copy the config file to the destination --------------------------------- 3.11s
+Restart docker systemd to take effect ----------------------------------- 2.97s
+Gathering Facts --------------------------------------------------------- 2.97s
+Make sure the id_rsa.pub ------------------------------------------------ 2.13s
 Make sure the id_rsa ---------------------------------------------------- 1.92s
-Make sure the authorized_keys ------------------------------------------- 1.86s
+Ensure docker.json had contents ----------------------------------------- 1.90s
+utils repo -------------------------------------------------------------- 1.88s
 Make sure the id_rsa.pub ------------------------------------------------ 1.83s
-utils repo -------------------------------------------------------------- 1.68s
-Ensure docker.json had contents ----------------------------------------- 1.64s
-Modify /usr/share/kolla-ansible/init-runonce ---------------------------- 1.64s
-Ensure config file folders exists --------------------------------------- 1.21s
-Restart docker systemd to take effect ----------------------------------- 1.01s
-Make sure the root ssh folder exists ------------------------------------ 0.96s
-Make sure ntp is running ------------------------------------------------ 0.94s
+Make sure the authorized_keys ------------------------------------------- 1.83s
+Make the br-ex had a new ip address, it connects br-ex ------------------ 1.80s
+Modify /usr/share/kolla-ansible/init-runonce ---------------------------- 1.61s
+Ensure config file folders exists --------------------------------------- 1.26s
+Make sure ntp is running ------------------------------------------------ 1.16s
+Ensure nova-compute.conf had contents ----------------------------------- 1.08s
 ```
 + if it takes longer than that time, please log in
 control-1 and run following command to see whether the docker instances are being built
