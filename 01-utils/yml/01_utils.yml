@@ -90,7 +90,7 @@
       register: gz_st
     - name: Download the image file first
       fail:
-        msg: "You should download centos-source-registry-ocata.tar.gz first"
+        msg: "You should download http://tarballs.openstack.org/kolla/images/centos-source-registry-ocata.tar.gz first"
       when: not gz_st.stat.exists
     - name: unzip the file to /opt/registry
       shell: |
