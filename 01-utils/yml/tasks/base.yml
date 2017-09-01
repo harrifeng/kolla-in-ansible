@@ -1,23 +1,4 @@
 ---
-- name: Make sure the root ssh folder exists
-  file:
-    path: /root/.ssh
-    state: directory
-- name: Make sure the id_rsa.pub
-  copy:
-    src: dotssh/id_rsa.pub
-    dest: /root/.ssh/id_rsa.pub
-    mode: 0644
-- name: Make sure the id_rsa
-  copy:
-    src: dotssh/id_rsa
-    dest: /root/.ssh/id_rsa
-    mode: 0600
-- name: Make sure the authorized_keys
-  copy:
-    src: dotssh/authorized_keys
-    dest: /root/.ssh/authorized_keys
-    mode: 0644
 - name: utils repo
   copy:
     src: config/utils.repo
@@ -47,15 +28,6 @@
 - name: Diable selinux
   selinux:
     state: disabled
-- name: Ensure docker.service directory is existed
-  file:
-    path: "{{ systemd_docker_config_directory }}"
-    state: directory
-- name: Ensure kolla.conf had contents
-  copy:
-    src: config/kolla.conf
-    dest: "{{ systemd_docker_config_directory }}/kolla.conf"
-    force: yes
 - name: Ensure docker.etc directory is existed
   file:
     path: "/etc/docker"

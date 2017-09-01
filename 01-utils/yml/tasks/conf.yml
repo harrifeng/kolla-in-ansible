@@ -1,4 +1,15 @@
 ---
+- name: Ensure config file folders exists
+  file:
+    path: "{{ item.dest }}"
+    state: directory
+  with_items: "{{ config_files }}"
+- name: Copy the config file to the destination
+  copy:
+    src: "{{ item.src }}/{{ item.name}}"
+    dest: "{{ item.dest }}/{{ item.name}}"
+    force: yes
+  with_items: "{{ config_files }}"
 - name: Find out the vm support
   shell: |
     egrep -c '(vmx|svm)' /proc/cpuinfo
@@ -14,22 +25,12 @@
     src: config/nova-compute.conf
     dest: /etc/kolla/config/nova/nova-compute.conf
   when: vm_num.stdout|int == 0
-- name: Ensure config had folder
-  file:
-    path: /etc/kolla/config/
-    state: directory
-- name: Modify the etc hosts file
-  copy:
-    src: config/hosts
-    dest: /etc/hosts
-    force: yes
 - name: Ensure the target folder existed
   file:
     path: "{{ item }}"
     state: directory
   with_items:
     - /etc/kolla
-    - /root/inventory
 - name: Get contents from /usr/share/kolla-ansible
   shell: |
     cp -r /usr/share/kolla-ansible/etc_examples/kolla/* /etc/kolla/
@@ -69,3 +70,15 @@
     - { regexp: '^EXT_NET_CIDR',    line: 'EXT_NET_CIDR="{{    ext_net_cidr    }}"'}
     - { regexp: '^EXT_NET_RANGE',   line: 'EXT_NET_RANGE="{{   ext_net_range   }}"'}
     - { regexp: '^EXT_NET_GATEWAY', line: 'EXT_NET_GATEWAY="{{ ext_net_gateway }}"'}
+- name: Clean old containers
+  shell: |
+    /usr/share/kolla-ansible/tools/cleanup-host
+    /usr/share/kolla-ansible/tools/cleanup-containers
+- name: Deploy all the instance
+  shell: |
+    kolla-ansible deploy -i {{ deploy_file}}
+    kolla-ansible post-deploy -i {{ deploy_file }}
+- name: Create the All In One Kolla
+  shell: |
+    source /etc/kolla/admin-openrc.sh
+    /usr/share/kolla-ansible/init-runonce

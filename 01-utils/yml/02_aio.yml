@@ -2,6 +2,7 @@
 - hosts: 02-aio
   sudo: yes
   tasks:
+    - include: tasks/ssh.yml
     - include: tasks/base.yml
       vars:
         systemd_docker_config_directory: /etc/systemd/system/docker.service.d
@@ -29,31 +30,16 @@
         ext_net_cidr:    "{{ external_ip }}.0/24"
         ext_net_range:   "start={{ external_ip }}.100,end={{ external_ip }}.200"
         ext_net_gateway: "{{ external_ip }}.1"
-    - name: Get contents from /usr/share/kolla-ansible
-      shell: |
-        cp -r /usr/share/kolla-ansible/ansible/inventory/all-in-one /root/inventory/all-in-one
-    - name: Ensure ceph.conf had contents # only all-in-one need this setting, as we only had one hosts
-      copy:
-        src: tasks/config/ceph.conf
-        dest: /etc/kolla/config/ceph.conf
+        deploy_file: /root/inventory/all-in-one
+        config_files:
+          - { src: "tasks/config", dest: "/etc/systemd/system/docker.service.d", name: "kolla.conf"}
+          - { src: "tasks/config", dest: "/root/inventory",                      name: "all-in-one"}
+          - { src: "tasks/config", dest: "/etc",                                 name: "hosts"}
+          - { src: "tasks/config", dest: "/etc/kolla/config",                    name: "ceph.conf"} # only all-in-one need this
     - name: Prepare the OSD as storage driver
       shell: |
         parted /dev/sdb -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP 1 -1
       ignore_errors: yes        # may already in use
-    - name: Clean old containers
-      shell: |
-        docker stop `docker ps -a -q`
-        docker system prune --force
-        /usr/share/kolla-ansible/tools/cleanup-host
-        /usr/share/kolla-ansible/tools/cleanup-containers
-    - name: Deploy all the instance
-      shell: |
-        kolla-ansible deploy -i /root/inventory/all-in-one
-        kolla-ansible post-deploy
-    - name: Create the All In One Kolla
-      shell: |
-        source /etc/kolla/admin-openrc.sh
-        /usr/share/kolla-ansible/init-runonce
     - name: Make the br-ex had a new ip address, it connects br-ex
       shell: |
         ip addr add 10.0.24.254/24 dev br-ex
