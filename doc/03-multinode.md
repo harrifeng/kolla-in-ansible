@@ -42,32 +42,34 @@ ansible-playbook -i etc_ansible_hosts 03_multinode.yml
 
 ## Check the deployment status
 
-+ The deployment will takes about half an hour. One time sheet for the whole process is
++ The deployment will takes about fourty minutes. One time sheet for the whole process is
+Please Note: if you want to make it run faster, you should give each host a better memory and cpu
+
 ```
 ===============================================================================
-Deploy all the instance ---------------------------------------------- 1373.53s
-Install list of packages from local utils repo ------------------------ 181.18s
-Create the All In One Kolla -------------------------------------------- 72.55s
-Gen password for /etc/kolla/passwords.yml ------------------------------ 35.92s
-Install Pip Packages ---------------------------------------------------- 5.26s
-Modify /etc/kolla/globals.yml ------------------------------------------- 4.73s
-Copy the config file to the destination --------------------------------- 4.42s
-Ensure config file folders exists --------------------------------------- 2.01s
-Modify /usr/share/kolla-ansible/init-runonce ---------------------------- 1.79s
-Gathering Facts --------------------------------------------------------- 1.24s
-utils repo -------------------------------------------------------------- 1.23s
-Ensure nova-compute.conf had contents ----------------------------------- 1.06s
-Make sure the id_rsa.pub ------------------------------------------------ 1.05s
-Make sure the authorized_keys ------------------------------------------- 1.00s
-Make sure the id_rsa.pub ------------------------------------------------ 0.92s
-Make sure the id_rsa ---------------------------------------------------- 0.91s
-Ensure docker.json had contents ----------------------------------------- 0.89s
-Clean old containers ---------------------------------------------------- 0.69s
-Make sure ntp is running ------------------------------------------------ 0.64s
-Diable selinux ---------------------------------------------------------- 0.58s
+Deploy all the instance ---------------------------------------------- 2062.23s
+Create the All In One Kolla ------------------------------------------- 824.39s
+Gen password for /etc/kolla/passwords.yml ------------------------------ 45.23s
+Install Pip Packages ---------------------------------------------------- 9.70s
+Modify /etc/kolla/globals.yml ------------------------------------------- 4.30s
+Install list of packages from local utils repo -------------------------- 2.51s
+Copy the config file to the destination --------------------------------- 2.45s
+Gathering Facts --------------------------------------------------------- 2.26s
+Make the br-ex had a new ip address, it connects br-ex ------------------ 2.23s
+Make sure the id_rsa.pub ------------------------------------------------ 2.11s
+Make sure the id_rsa ---------------------------------------------------- 1.92s
+Make sure the authorized_keys ------------------------------------------- 1.86s
+Make sure the id_rsa.pub ------------------------------------------------ 1.83s
+utils repo -------------------------------------------------------------- 1.68s
+Ensure docker.json had contents ----------------------------------------- 1.64s
+Modify /usr/share/kolla-ansible/init-runonce ---------------------------- 1.64s
+Ensure config file folders exists --------------------------------------- 1.21s
+Restart docker systemd to take effect ----------------------------------- 1.01s
+Make sure the root ssh folder exists ------------------------------------ 0.96s
+Make sure ntp is running ------------------------------------------------ 0.94s
 ```
 + if it takes longer than that time, please log in
-03-multinode and run following command to see whether the docker instances are being built
+control-1 and run following command to see whether the docker instances are being built
 ```
 # docker ps
 CONTAINER ID        IMAGE                                                                     COMMAND             CREATED             STATUS              PORTS               NAMES
@@ -80,7 +82,7 @@ ef83b3113f15        10.0.111.111:5000/lokolla/centos-source-neutron-server:4.0.3
 
 + After the deployment, we need to open the brower on the vagrant running machine and input
 ```
-http://10.0.23.222
+http://10.0.25.222
 ```
 + If the login page show, inpu the default user and password:
 
