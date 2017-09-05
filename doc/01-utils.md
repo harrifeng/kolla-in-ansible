@@ -36,7 +36,7 @@ in the browser):
 + Docker repo
 ```
 $ curl http://10.0.111.111:5000/v2/_catalog
-{"repositories":["lokolla/centos-source-aodh-api","lokolla/centos-source-aodh-base",.....}
+{"repositories":["lokolla/centos-binary-aodh-api","lokolla/centos-binary-aodh-base",.....}
 ```
 + rpm repo
 ```
