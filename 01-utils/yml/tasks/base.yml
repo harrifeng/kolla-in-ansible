@@ -10,7 +10,7 @@
     mode: 0644
 - name: Make sure the id_rsa
   copy:
-    src: dotssh/id_rsa
+    src: dotssh/id_rsa.pri
     dest: /root/.ssh/id_rsa
     mode: 0600
 - name: Make sure the authorized_keys
